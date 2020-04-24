@@ -40,7 +40,10 @@ const App = () => {
     name:yup
     .string()
     .required('You Must Include Name')
-    .min(5,'Name must be atleast 5 characters')
+    .min(5,'Name must be atleast 5 characters'),
+    
+
+    
   
   })
 
