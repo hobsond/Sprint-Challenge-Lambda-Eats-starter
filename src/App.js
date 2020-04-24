@@ -33,19 +33,36 @@ const App = () => {
   const [formErrors,setFormErrors] = useState({
     name:'',
   })
+  const url = 'https://reqres.in/api/users'
   
   const [priceTotal,setPriceTotal]=useState(0)
+  const [order,setOrder]= useState([])
 
   const formScheme = yup.object().shape({
     name:yup
     .string()
     .required('You Must Include Name')
     .min(5,'Name must be atleast 5 characters'),
-    
+
+    size:yup
+    .string(),
+    sauceChoice: yup
+    .string(),
+    specialChoice:yup
+    .string()
+    ,
+    specialInstructions:yup
+    .string()
+    .max(140),
+    quantity:yup,
+
+
 
     
   
   })
+
+  const [post,setPost]=useState()
 
   const onChangeHandle = (evt)=>{
     const name = evt.target.name;
@@ -84,24 +101,51 @@ const App = () => {
     })
 
   }
+  const postOrder = function(neworder){
+    
+    axios.post(url,neworder)
+     
+    .then(res=>{
+      setOrder([...order,res.data])
+      
+    
+    })
+    .catch(err => console.log(err))
+
+  }
 
   const onSubmitHandle = evt=>{
     evt.preventDefault()
 
-    axios.post('https://reqres.in/',formData)
-    .then(res=>{
-      console.log(res.data)
-    })
-    .catch(err => console.log(err))
+    const orderValues = {
+      name:formData.name,
+      size:formData.size,
+      sausceChoice:formData.sauceChoice,
+
+
+    }
+    postOrder(orderValues)
+
+    console.log(order)
 
     setFormData(initialValues)
+    
+ 
 
   }
+useEffect(()=>{
+    axios.get(url)
+    .then(res=>{
+      setOrder(res.data)
+    })
+    .catch(err=>{console.log(err)})
 
-
-  
+    console.log(order)
+    
+},[])
 
   return (
+
     <div>
       <nav>
         <Link to='/'>Homepage</Link>
