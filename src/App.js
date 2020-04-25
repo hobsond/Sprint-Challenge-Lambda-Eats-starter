@@ -19,7 +19,7 @@ const initialValues = {
     pineapple:false,
   },
   specialInstructions:'',
-  quantity:'',
+  quantity:1,
 
 
 }
@@ -36,6 +36,7 @@ const App = () => {
   const url = 'https://reqres.in/api/users'
   
   const [priceTotal,setPriceTotal]=useState(0)
+  const [valid,setValid]= useState()
   const [order,setOrder]= useState([])
 
   const formScheme = yup.object().shape({
@@ -54,7 +55,9 @@ const App = () => {
     specialInstructions:yup
     .string()
     .max(140),
-    quantity:yup,
+    quantity:yup
+    .string()
+    ,
 
 
 
@@ -62,7 +65,7 @@ const App = () => {
   
   })
 
-  const [post,setPost]=useState()
+  
 
   const onChangeHandle = (evt)=>{
     const name = evt.target.name;
@@ -74,6 +77,7 @@ const App = () => {
       setFormErrors({...formErrors,
       [name]: '',
       })
+      setValid(valid)
     
     })
     .catch(err=>{
@@ -106,9 +110,10 @@ const App = () => {
     axios.post(url,neworder)
      
     .then(res=>{
-      setOrder([...order,res.data])
-      
-    
+      setOrder([...order, res.data])
+
+  
+   
     })
     .catch(err => console.log(err))
 
@@ -117,16 +122,12 @@ const App = () => {
   const onSubmitHandle = evt=>{
     evt.preventDefault()
 
-    const orderValues = {
-      name:formData.name,
-      size:formData.size,
-      sausceChoice:formData.sauceChoice,
+   
+    postOrder(formData)
 
+    
 
-    }
-    postOrder(orderValues)
-
-    console.log(order)
+  
 
     setFormData(initialValues)
     
@@ -134,15 +135,11 @@ const App = () => {
 
   }
 useEffect(()=>{
-    axios.get(url)
-    .then(res=>{
-      setOrder(res.data)
-    })
-    .catch(err=>{console.log(err)})
-
-    console.log(order)
+  console.log(order)
+  
     
-},[])
+},[order])
+
 
   return (
 
@@ -158,6 +155,7 @@ useEffect(()=>{
           onChangeHandle={onChangeHandle}
           onChecked={onChecked}
           formErrors={formErrors}
+          onsubmit={onSubmitHandle}
           />
         </Route>
       

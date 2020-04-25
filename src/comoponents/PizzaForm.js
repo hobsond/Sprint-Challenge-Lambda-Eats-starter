@@ -1,7 +1,7 @@
 import React from 'react'
 
 export default function PizzaForm(props) {
-    const {onChangeHandle,onChecked,formData,formErrors} = props
+    const {onChangeHandle,onChecked,formData,formErrors,onsubmit} = props
 
     
     return (
@@ -47,9 +47,9 @@ export default function PizzaForm(props) {
             <input type='textarea' name='specialInstructions' onChange={onChangeHandle} />
 
             <label htmlFor='quantity'>quantity</label>
-            <input type='number' step='1' name='quantity' onChange={onChangeHandle}/>
+            <input type='number'  step='1' name='quantity' onChange={onChangeHandle}/>
 
-            <button>Order Now</button>
+            <button onClick={onsubmit}>Order Now</button>
 
 
 
